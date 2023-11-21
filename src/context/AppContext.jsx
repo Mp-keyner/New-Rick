@@ -9,27 +9,57 @@ export const AppContextProvider = ({ children }) => {
   const [isMobileDevice, setIsMobile] = useState(false);
   const [data, setData] = useState([]);
   const { counter, decrease, increase } = useCountere();
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("");
+  const [gender, setGender] = useState("");
+  const [species, setSpecies] = useState("");
 
   useEffect(() => {
-    // Lógica para determinar si es móvil basado en el ancho de la pantalla
     setIsMobile(isMobile);
+    GetData();
+  }, [counter, search, status, gender, species]);
 
-    // Lógica para cargar los datos cuando el contador cambia
-    GetData(counter);
-  }, [counter]);
-
-  const GetData = async (counter) => {
+  const GetData = async () => {
     try {
-      const { data } = await RickApi.get(`?page=${counter}`);
+      const { data } = await RickApi.get(
+        `?page=${counter}&name=${search}&status=${status}&gender=${gender}&species=${species}`
+      );
       setData(data.results);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
+  const setSearchParam = (value) => {
+    setSearch(value);
+  };
+
+  const setStatusParam = (value) => {
+    setStatus(value);
+  };
+
+  const setGenderParam = (value) => {
+    setGender(value);
+  };
+
+  const setSpeciesParam = (value) => {
+    setSpecies(value);
+  };
+
   return (
     <AppContext.Provider
-      value={{ data, GetData, increase, decrease, counter, isMobileDevice }}
+      value={{
+        data,
+        GetData,
+        increase,
+        decrease,
+        counter,
+        isMobileDevice,
+        setSearchParam,
+        setStatusParam,
+        setGenderParam,
+        setSpeciesParam,
+      }}
     >
       {children}
     </AppContext.Provider>

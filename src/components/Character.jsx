@@ -21,7 +21,7 @@ const Character = () => {
   const ShowSpiner = () => {
     setTimeout(() => {
       setSpiner(true);
-    }, 6000);
+    }, 1000);
   };
 
   return (
